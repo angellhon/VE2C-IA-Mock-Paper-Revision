@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VE2C IA Mock Practice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); }
+        .tab-btn.active { border-bottom: 4px solid #2563eb; color: #2563eb; font-weight: 700; }
+        .blank-input {
+            border: 2px solid #cbd5e1;
+            border-radius: 0.375rem;
+            padding: 0.375rem 0.625rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            background-color: #ffffff;
+            transition: all 0.2s;
+        }
+        .blank-input:focus {
+            border-color: #2563eb;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+        .blank-select {
+            border: 2px solid #cbd5e1;
+            border-radius: 0.375rem;
+            padding: 0.375rem 0.5rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            background-color: #ffffff;
+            color: #1e293b;
+            transition: all 0.2s;
+        }
+        .blank-select:focus {
+            border-color: #2563eb;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+        /* Highlight Badges for Model Answer */
+        .hl-sugg { background-color: #fef08a; color: #854d0e; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+        .hl-seq { background-color: #bfdbfe; color: #1e40af; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+        .hl-modal { background-color: #ddd6fe; color: #5b21b6; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+        .hl-if { background-color: #a7f3d0; color: #065f46; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+        .hl-conn { background-color: #fed7aa; color: #9a3412; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+
+        /* Task Key Details Highlights */
+        .hl-task-key { background-color: #fef08a; color: #713f12; font-weight: 700; padding: 1px 4px; border-radius: 3px; }
+        .hl-task-note { background-color: #dbeafe; color: #1e40af; font-weight: 700; padding: 1px 4px; border-radius: 3px; }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen flex flex-col text-slate-800 text-base">
+
+    <!-- Header Section -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center space-x-4">
+                <div class="bg-white/20 p-3 rounded-2xl border border-white/30 shadow-inner">
+                    <i class="fa-solid fa-briefcase text-3xl text-yellow-300"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-extrabold tracking-wide">VE2C IA Mock Practice</h1>
+                    <p class="text-sm md:text-base text-blue-100 font-medium">Interactive Email & Assessment Builder</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2 bg-white/10 px-4 py-2 rounded-xl border border-white/20 text-base font-semibold">
+                <i class="fa-solid fa-graduation-cap text-yellow-300 text-lg"></i>
+                <span>Vocational Module</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-white border-b-2 border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 flex space-x-8 overflow-x-auto">
+            <button onclick="switchTab('promptTab')" id="tab-promptTab" class="tab-btn active py-4 text-base font-semibold transition-colors flex items-center gap-2 whitespace-nowrap">
+                <i class="fa-solid fa-file-lines text-lg"></i> 1. Mock Scenario
+            </button>
+            <button onclick="switchTab('builderTab')" id="tab-builderTab" class="tab-btn py-4 text-base font-semibold transition-colors flex items-center gap-2 whitespace-nowrap">
+                <i class="fa-solid fa-pen-to-square text-lg"></i> 2. Guided Email Builder
+            </button>
+            <button onclick="switchTab('revisionTab')" id="tab-revisionTab" class="tab-btn py-4 text-base font-semibold transition-colors flex items-center gap-2 whitespace-nowrap">
+                <i class="fa-solid fa-book-open text-lg"></i> 3. Key Language Focus
+            </button>
+            <button onclick="switchTab('gameTab')" id="tab-gameTab" class="tab-btn py-4 text-base font-semibold transition-colors flex items-center gap-2 whitespace-nowrap">
+                <i class="fa-solid fa-gamepad text-purple-600 text-lg"></i> 4. 10-Min Knowledge Challenge
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-6 py-8 flex-grow w-full">
+
+        <!-- TAB 1: MOCK SCENARIO & WORK PLAN -->
+        <div id="promptTab" class="tab-content block space-y-6">
+            <div class="bg-blue-50 border-l-8 border-blue-600 p-5 rounded-r-xl shadow-sm">
+                <h2 class="font-bold text-blue-950 text-xl flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info text-blue-600"></i> Task Context
+                </h2>
+                <p class="text-base text-blue-900 mt-2 leading-relaxed">
+                    You are <strong>Emma Wong</strong>, Executive Assistant at Harmony Group Limited. Reply to your colleague <strong>Stephen Cheung</strong> regarding his inquiry about the Clean-up Campaign.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Incoming Email Card with Key Details Highlighted -->
+                <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
+                    <div class="bg-slate-800 text-white px-6 py-4 flex items-center justify-between">
+                        <span class="font-bold text-base flex items-center gap-2.5">
+                            <i class="fa-regular fa-envelope text-yellow-400 text-lg"></i> Incoming Email from Colleague
+                        </span>
+                        <span class="text-xs bg-slate-700 px-3 py-1 rounded-full text-slate-200 font-mono">Received Today</span>
+                    </div>
+                    <div class="p-6 space-y-4 text-base">
+                        <div class="border-b pb-3 text-sm text-slate-600 space-y-1 font-mono">
+                            <p><strong>From:</strong> Stephen Cheung &lt;scheung@harmony.com&gt;</p>
+                            <p><strong>To:</strong> Emma Wong &lt;emmawong@harmony.com&gt;</p>
+                            <p><strong>Subject:</strong> <span class="hl-task-key">Clean-up Campaign</span></p>
+                        </div>
+                        <div class="space-y-4 text-slate-800 leading-relaxed pt-2 text-base">
+                            <p>Dear Emma,</p>
+                            <p>I am going to organise a <span class="hl-task-key">clean-up campaign</span> to improve the local environment. The Manager has asked me to suggest the <span class="hl-task-key">target participants</span> and a <span class="hl-task-key">promotional method</span> for the event. I remember you organised a park clean-up activity successfully last year. Can you give me some ideas?</p>
+                            <p>I also need to <span class="hl-task-key">invite speakers</span> for a <span class="hl-task-key">recycling workshop</span>. Could you tell me what to do? Thanks a lot.</p>
+                            <p class="pt-2">Regards,<br><strong>Stephen</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notes & Work Plan Card -->
+                <div class="space-y-6">
+                    <!-- Handwritten Notes -->
+                    <div class="bg-amber-50 border-2 border-amber-300 rounded-2xl p-6 shadow-sm">
+                        <h3 class="font-bold text-amber-950 text-base uppercase tracking-wider flex items-center gap-2 mb-3">
+                            <i class="fa-solid fa-note-sticky text-amber-600 text-xl"></i> Action Notes (Handwritten Hints)
+                        </h3>
+                        <ul class="space-y-3 text-base text-amber-950">
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-check text-green-600 mt-1 font-bold"></i>
+                                <span><strong>Target participants:</strong> <span class="hl-task-note">employees & local residents</span> (<i>Reason:</i> likely to make <span class="hl-task-note">positive impact on community</span>; adopt <span class="hl-task-note">sustainable habits in daily lives</span>)</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-check text-green-600 mt-1 font-bold"></i>
+                                <span><strong>Promotional method:</strong> <span class="hl-task-note">Social media platforms</span> (<i>Reason:</i> reach <span class="hl-task-note">wide audience quickly & interactively</span>; <span class="hl-task-note">cost of promoting online is low</span>)</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Work Plan Table -->
+                    <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-6">
+                        <h3 class="font-bold text-slate-800 text-lg mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-list-check text-blue-600"></i> Preparatory Work Plan (Recycling Workshop)
+                        </h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-100 border-b-2 border-slate-200">
+                                        <th class="p-3 font-bold text-slate-700">Step</th>
+                                        <th class="p-3 font-bold text-slate-700">Action Item</th>
+                                        <th class="p-3 font-bold text-slate-700">Remark / Condition</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200">
+                                    <tr>
+                                        <td class="p-3 font-bold text-blue-600">1</td>
+                                        <td class="p-3 font-medium text-slate-800"><span class="hl-task-key">Identify suitable speakers</span></td>
+                                        <td class="p-3 text-slate-600">at least 1 month before workshop</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-bold text-blue-600">2</td>
+                                        <td class="p-3 font-medium text-slate-800"><span class="hl-task-key">Prepare formal invitation to speakers</span></td>
+                                        <td class="p-3 text-slate-600">e.g. event objectives, schedule</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-bold text-blue-600">3</td>
+                                        <td class="p-3 font-medium text-slate-800">Submit proposed workshop arrangements</td>
+                                        <td class="p-3 text-slate-600"><span class="hl-task-key">Manager's approval</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-bold text-blue-600">4</td>
+                                        <td class="p-3 font-medium text-slate-800">Event Coordinator: contact speakers</td>
+                                        <td class="p-3 text-slate-600">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-bold text-blue-600">5a</td>
+                                        <td class="p-3 font-medium text-slate-800"><span class="hl-task-key">Arrange transportation and parking</span></td>
+                                        <td class="p-3 text-slate-600"><span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-bold">IF</span> invite external speakers</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-bold text-blue-600">5b</td>
+                                        <td class="p-3 font-medium text-slate-800"><span class="hl-task-key">Inform related departments</span></td>
+                                        <td class="p-3 text-slate-600"><span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-bold">IF</span> invite internal speakers</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-4">
+                <button onclick="switchTab('builderTab')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3.5 rounded-xl transition-colors flex items-center gap-3 shadow-lg text-lg">
+                    Go to Guided Email Builder <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- TAB 2: INTERACTIVE EMAIL BUILDER (WITH SIDE-BY-SIDE TASK REFERENCE) -->
+        <div id="builderTab" class="tab-content hidden space-y-6">
+            <div class="flex flex-wrap justify-between items-center pb-2 border-b gap-4">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-slate-800">Interactive Email Builder</h2>
+                    <p class="text-base text-slate-600 mt-1">Locate facts from the prompt panel on the left and complete the email response on the right.</p>
+                </div>
+                <button type="button" onclick="fillSuggestedAnswer()" class="text-sm bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold px-4 py-2.5 rounded-xl border border-purple-200 flex items-center gap-2 transition shadow-sm">
+                    <i class="fa-solid fa-wand-magic-sparkles text-purple-600 text-base"></i> Auto-fill Sample Answers
+                </button>
+            </div>
+
+            <!-- Split Screen Container: Left Side Reference / Right Side Interactive Builder -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- Left Column: Task Sheet & Notes Reference Panel (sticky on lg screens) -->
+                <div class="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
+                    <!-- Task Notes Panel -->
+                    <div class="bg-amber-50 border-2 border-amber-300 rounded-2xl p-5 shadow-sm">
+                        <h3 class="font-bold text-amber-950 text-base uppercase tracking-wider flex items-center gap-2 mb-2">
+                            <i class="fa-solid fa-note-sticky text-amber-600 text-lg"></i> Reference: Task Sheet & Notes
+                        </h3>
+                        <div class="text-sm text-amber-950 space-y-3 leading-relaxed">
+                            <p class="border-b border-amber-200 pb-2">
+                                <strong>Topic & Purpose:</strong> Reply regarding <span class="hl-task-key">Clean-up Campaign</span>. Make suggestions & tell how to invite speakers for <span class="hl-task-key">recycling workshop</span>.
+                            </p>
+                            <div>
+                                <p class="font-bold text-amber-900">Target Participants:</p>
+                                <p class="pl-2 border-l-2 border-amber-400 mt-0.5">
+                                    • <span class="hl-task-note">employees and local residents</span><br>
+                                    • <i>Reasons:</i> <span class="hl-task-note">positive impact on community</span>; adopt <span class="hl-task-note">sustainable habits in daily lives</span>
+                                </p>
+                            </div>
+                            <div>
+                                <p class="font-bold text-amber-900">Promotional Method:</p>
+                                <p class="pl-2 border-l-2 border-amber-400 mt-0.5">
+                                    • <span class="hl-task-note">social media platforms</span><br>
+                                    • <i>Reasons:</i> reach wide audience quickly; <span class="hl-task-note">promoting online is low</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Work Plan Mini Reference -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-3">
+                        <h3 class="font-bold text-slate-800 text-base flex items-center gap-2 border-b pb-2">
+                            <i class="fa-solid fa-list-check text-blue-600"></i> Work Plan Steps Reference
+                        </h3>
+                        <div class="text-xs md:text-sm space-y-2 text-slate-700">
+                            <div class="p-2 bg-slate-50 rounded-lg border border-slate-200">
+                                <span class="font-bold text-blue-700">Step 1:</span> Identify suitable speakers (1 month before)
+                            </div>
+                            <div class="p-2 bg-slate-50 rounded-lg border border-slate-200">
+                                <span class="font-bold text-blue-700">Step 2:</span> Prepare formal invitations to speakers
+                            </div>
+                            <div class="p-2 bg-slate-50 rounded-lg border border-slate-200">
+                                <span class="font-bold text-blue-700">Step 3:</span> Proposed workshop arrangements &rarr; Manager's approval
+                            </div>
+                            <div class="p-2 bg-slate-50 rounded-lg border border-slate-200">
+                                <span class="font-bold text-blue-700">Step 4:</span> Event Coordinator: contact speakers
+                            </div>
+                            <div class="p-2 bg-slate-50 rounded-lg border border-slate-200">
+                                <span class="font-bold text-blue-700">Step 5a:</span> Arrange transportation & parking <span class="font-bold text-emerald-700">IF external speakers</span>
+                            </div>
+                            <div class="p-2 bg-slate-50 rounded-lg border border-slate-200">
+                                <span class="font-bold text-blue-700">Step 5b:</span> Inform related departments <span class="font-bold text-emerald-700">IF internal speakers</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Interactive Email Form -->
+                <div class="lg:col-span-7 bg-white rounded-2xl shadow-md border border-slate-200 p-6 md:p-8 space-y-6">
+                    <form id="emailForm" class="space-y-6 text-slate-800">
+                        <!-- Email Header Fields -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-5 rounded-xl border border-slate-200 font-mono">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">To:</label>
+                                <input type="text" value="Stephen Cheung <scheung@harmony.com>" readonly class="w-full bg-slate-200 border border-slate-300 rounded-lg p-2.5 text-sm font-semibold text-slate-700 cursor-not-allowed">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Subject:</label>
+                                <input type="text" value="RE: Clean-up Campaign - Suggestions & Workshop Guide" readonly class="w-full bg-slate-200 border border-slate-300 rounded-lg p-2.5 text-sm font-semibold text-slate-700 cursor-not-allowed">
+                            </div>
+                        </div>
+
+                        <!-- Section 1: Salutation & Opening -->
+                        <div class="border border-slate-200 rounded-xl p-5 bg-slate-50/50 space-y-3">
+                            <label class="block font-bold text-lg text-blue-900 border-b pb-2">
+                                1. Salutation & Opening Purpose
+                            </label>
+                            <div class="text-base leading-loose space-y-3 pt-1">
+                                <div>Dear Stephen,</div>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span>Thank you for your email about the</span>
+                                    <input type="text" id="open_topic" class="blank-input min-w-[200px]" style="width: 220px;">
+                                    <span>. I am writing to</span>
+                                    <input type="text" id="open_purpose" class="blank-input min-w-[200px]" style="width: 200px;">
+                                    <span>and tell you how to</span>
+                                    <input type="text" id="open_purpose2" class="blank-input min-w-[220px]" style="width: 220px;">
+                                    <span>for the recycling workshop.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Making Suggestions (Target & Method) -->
+                        <div class="border border-slate-200 rounded-xl p-5 bg-slate-50/50 space-y-4">
+                            <label class="block font-bold text-lg text-blue-900 border-b pb-2">
+                                2. Making Suggestions & Explaining Reasons
+                            </label>
+
+                            <!-- Suggestion 1: Participants -->
+                            <div class="space-y-2 bg-white p-4 rounded-xl border border-slate-200">
+                                <p class="text-xs font-bold uppercase text-slate-500 tracking-wider">A. Target Participants</p>
+                                <div class="flex flex-wrap items-center gap-2 text-base leading-loose">
+                                    <span>Regarding the target participants,</span>
+                                    <select id="sugg_struct_1" class="blank-select">
+                                        <option value="">-- Choose Phrase --</option>
+                                        <option value="it might be a good idea to">it might be a good idea to</option>
+                                        <option value="I suggest">I suggest</option>
+                                    </select>
+                                    <input type="text" id="target_who" class="blank-input min-w-[300px] flex-1">
+                                    <span>because they are likely to make a</span>
+                                    <input type="text" id="target_reason1" class="blank-input min-w-[280px] flex-1">
+                                    <span>. Also, they can adopt</span>
+                                    <input type="text" id="target_reason2" class="blank-input min-w-[300px] flex-1">
+                                    <span>.</span>
+                                </div>
+                            </div>
+
+                            <!-- Suggestion 2: Promotional Method -->
+                            <div class="space-y-2 bg-white p-4 rounded-xl border border-slate-200">
+                                <p class="text-xs font-bold uppercase text-slate-500 tracking-wider">B. Promotional Method</p>
+                                <div class="flex flex-wrap items-center gap-2 text-base leading-loose">
+                                    <span>As for the promotional method,</span>
+                                    <select id="sugg_struct_2" class="blank-select">
+                                        <option value="">-- Choose Phrase --</option>
+                                        <option value="I suggest">I suggest</option>
+                                        <option value="it might be a good idea to">it might be a good idea to</option>
+                                    </select>
+                                    <input type="text" id="method_what" class="blank-input min-w-[280px] flex-1">
+                                    <span>because they can reach a wide audience quickly and interactively. In addition, the cost of</span>
+                                    <input type="text" id="method_reason" class="blank-input min-w-[240px] flex-1">
+                                    <span>.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Giving Instructions (Sequencing, Modals & If-Conditionals) -->
+                        <div class="border border-slate-200 rounded-xl p-5 bg-slate-50/50 space-y-4">
+                            <label class="block font-bold text-lg text-blue-900 border-b pb-2">
+                                3. Giving Step-by-Step Instructions (Sequencing, Modals & Conditionals)
+                            </label>
+
+                            <div class="space-y-4 text-base leading-loose">
+                                <!-- Step 1 -->
+                                <div class="bg-white p-4 rounded-xl border border-slate-200 space-y-2">
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <span class="font-bold text-blue-700 text-sm bg-blue-100 px-2 py-0.5 rounded">Step 1</span>
+                                        <span>To invite speakers for the recycling workshop,</span>
+                                        <select id="seq_1" class="blank-select">
+                                            <option value="">-- Sequence --</option>
+                                            <option value="First">First</option>
+                                            <option value="Then">Then</option>
+                                            <option value="Finally">Finally</option>
+                                        </select>
+                                        <span>, you</span>
+                                        <select id="modal_1" class="blank-select">
+                                            <option value="">-- Modal --</option>
+                                            <option value="should">should</option>
+                                            <option value="would">would</option>
+                                            <option value="might">might</option>
+                                        </select>
+                                        <input type="text" id="step1_action" class="blank-input min-w-[240px]">
+                                        <span>at least 1 month before the workshop.</span>
+                                    </div>
+                                </div>
+
+                                <!-- Step 2 -->
+                                <div class="bg-white p-4 rounded-xl border border-slate-200 space-y-2">
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <span class="font-bold text-blue-700 text-sm bg-blue-100 px-2 py-0.5 rounded">Step 2</span>
+                                        <select id="seq_2" class="blank-select">
+                                            <option value="">-- Sequence --</option>
+                                            <option value="Then">Then</option>
+                                            <option value="First">First</option>
+                                            <option value="Finally">Finally</option>
+                                        </select>
+                                        <span>, you should</span>
+                                        <input type="text" id="step2_action" class="blank-input min-w-[250px]">
+                                        <span>to the speakers including event details such as event objectives and the schedule.</span>
+                                    </div>
+                                </div>
+
+                                <!-- Step 3 -->
+                                <div class="bg-white p-4 rounded-xl border border-slate-200 space-y-2">
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <span class="font-bold text-blue-700 text-sm bg-blue-100 px-2 py-0.5 rounded">Step 3</span>
+                                        <select id="seq_3" class="blank-select">
+                                            <option value="">-- Sequence --</option>
+                                            <option value="Next">Next</option>
+                                            <option value="First">First</option>
+                                        </select>
+                                        <span>, you should submit the proposed workshop arrangements for the Manager's</span>
+                                        <input type="text" id="step3_approval" class="blank-input w-36">
+                                        <span>.</span>
+                                    </div>
+                                </div>
+
+                                <!-- Step 4 -->
+                                <div class="bg-white p-4 rounded-xl border border-slate-200 space-y-2">
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <span class="font-bold text-blue-700 text-sm bg-blue-100 px-2 py-0.5 rounded">Step 4</span>
+                                        <select id="seq_4" class="blank-select">
+                                            <option value="">-- Sequence --</option>
+                                            <option value="After that">After that</option>
+                                            <option value="First">First</option>
+                                        </select>
+                                        <span>, the Event Coordinator</span>
+                                        <select id="modal_4" class="blank-select">
+                                            <option value="">-- Modal --</option>
+                                            <option value="should">should</option>
+                                            <option value="could">could</option>
+                                        </select>
+                                        <span>contact the speakers.</span>
+                                    </div>
+                                </div>
+
+                                <!-- Step 5: Conditionals Focus (IF clauses) -->
+                                <div class="bg-white p-4 rounded-xl border-2 border-emerald-200 space-y-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="font-bold text-emerald-800 text-sm bg-emerald-100 px-2 py-0.5 rounded">Step 5 & Conditionals Focus</span>
+                                        <span class="text-xs font-semibold text-emerald-700">(Handling external vs. internal speakers)</span>
+                                    </div>
+
+                                    <!-- Step 5a -->
+                                    <div class="flex flex-wrap items-center gap-2 pt-1">
+                                        <select id="seq_5" class="blank-select">
+                                            <option value="">-- Sequence --</option>
+                                            <option value="Finally">Finally</option>
+                                            <option value="First">First</option>
+                                        </select>
+                                        <span>, you should arrange transportation and parking</span>
+                                        <select id="if_cond_1" class="blank-select font-bold text-emerald-700">
+                                            <option value="">-- Condition --</option>
+                                            <option value="if">if</option>
+                                            <option value="unless">unless</option>
+                                            <option value="because">because</option>
+                                        </select>
+                                        <span>you</span>
+                                        <input type="text" id="cond_verb1" class="blank-input min-w-[220px]">
+                                        <span>.</span>
+                                    </div>
+
+                                    <!-- Step 5b -->
+                                    <div class="flex flex-wrap items-center gap-2 pt-1">
+                                        <span>You should</span>
+                                        <input type="text" id="cond_action2" class="blank-input min-w-[250px]">
+                                        <select id="if_cond_2" class="blank-select font-bold text-emerald-700">
+                                            <option value="">-- Condition --</option>
+                                            <option value="if">if</option>
+                                            <option value="when">when</option>
+                                            <option value="so">so</option>
+                                        </select>
+                                        <span>you invite internal speakers.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 4: Closing & Sign-off -->
+                        <div class="border border-slate-200 rounded-xl p-5 bg-slate-50/50 space-y-3">
+                            <label class="block font-bold text-lg text-blue-900 border-b pb-2">
+                                4. Sign-off
+                            </label>
+                            <div class="text-base space-y-3">
+                                <p>Please let me know if you need more information.</p>
+                                <p class="font-semibold text-slate-700">Regards,<br><strong>Emma</strong></p>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex flex-wrap gap-4 pt-4">
+                            <button type="button" onclick="checkEmailAnswers()" class="bg-green-600 hover:bg-green-700 text-white font-extrabold text-lg px-8 py-3.5 rounded-xl transition-all shadow-md flex items-center gap-3">
+                                <i class="fa-solid fa-circle-check text-xl"></i> Submit & Check Answers
+                            </button>
+                            <button type="button" onclick="resetEmailForm()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-base px-6 py-3.5 rounded-xl transition-all">
+                                Reset Form
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Feedback Output Card -->
+                    <div id="feedbackResult" class="hidden mt-8 p-6 rounded-2xl border text-base shadow-sm"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB 3: KEY LANGUAGE FOCUS & REVISION -->
+        <div id="revisionTab" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-6 md:p-8 space-y-6">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-slate-800 flex items-center gap-3">
+                        <i class="fa-solid fa-book-bookmark text-blue-600"></i> Assessment Language Focus
+                    </h2>
+                    <p class="text-base text-slate-600 mt-1">Master these core structures assessed in the Vocational IA Examination.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Focus 1: Making Suggestions -->
+                    <div class="border-2 border-blue-200 bg-blue-50/50 rounded-2xl p-6 space-y-4">
+                        <div class="flex items-center gap-3 text-blue-950 font-extrabold border-b border-blue-200 pb-3 text-lg">
+                            <i class="fa-regular fa-lightbulb text-yellow-500 text-2xl"></i>
+                            <h3>1. Making Suggestions & Providing Reasons</h3>
+                        </div>
+                        <ul class="space-y-3 text-sm md:text-base">
+                            <li class="bg-white p-3.5 rounded-xl border border-slate-200">
+                                <strong class="text-blue-700 block mb-1">Structure A (Base Verb):</strong>
+                                <code class="bg-slate-100 px-2 py-1 rounded text-sm font-mono text-slate-800">It might be a good idea to + [base verb]</code>
+                                <p class="text-slate-600 mt-2 text-sm"><em>e.g., It might be a good idea to <u>invite</u> employees and local residents.</em></p>
+                            </li>
+                            <li class="bg-white p-3.5 rounded-xl border border-slate-200">
+                                <strong class="text-blue-700 block mb-1">Structure B (Gerund -ing):</strong>
+                                <code class="bg-slate-100 px-2 py-1 rounded text-sm font-mono text-slate-800">I suggest + [verb-ing]</code>
+                                <p class="text-slate-600 mt-2 text-sm"><em>e.g., I suggest <u>using</u> social media platforms.</em></p>
+                            </li>
+                            <li class="bg-white p-3.5 rounded-xl border border-slate-200">
+                                <strong class="text-blue-700 block mb-1">Linking Reasons:</strong>
+                                <code class="bg-slate-100 px-2 py-1 rounded text-sm font-mono text-slate-800">because / as / since</code>
+                                <p class="text-slate-600 mt-2 text-sm"><em>e.g., ...because they can reach a wide audience quickly.</em></p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Focus 2: Instructions, Modals & Conditionals -->
+                    <div class="border-2 border-emerald-200 bg-emerald-50/50 rounded-2xl p-6 space-y-4">
+                        <div class="flex items-center gap-3 text-emerald-950 font-extrabold border-b border-emerald-200 pb-3 text-lg">
+                            <i class="fa-solid fa-list-ol text-emerald-600 text-2xl"></i>
+                            <h3>2. Instructions, Modals & Conditionals</h3>
+                        </div>
+                        <ul class="space-y-3 text-sm md:text-base">
+                            <li class="bg-white p-3.5 rounded-xl border border-slate-200">
+                                <strong class="text-emerald-800 block mb-1">Sequential Connectors:</strong>
+                                <div class="flex flex-wrap gap-1.5 mt-2 font-mono text-xs md:text-sm">
+                                    <span class="bg-emerald-100 text-emerald-900 px-2.5 py-1 rounded font-bold">First</span> &rarr;
+                                    <span class="bg-emerald-100 text-emerald-900 px-2.5 py-1 rounded font-bold">Then</span> &rarr;
+                                    <span class="bg-emerald-100 text-emerald-900 px-2.5 py-1 rounded font-bold">Next</span> &rarr;
+                                    <span class="bg-emerald-100 text-emerald-900 px-2.5 py-1 rounded font-bold">After that</span> &rarr;
+                                    <span class="bg-emerald-100 text-emerald-900 px-2.5 py-1 rounded font-bold">Finally</span>
+                                </div>
+                            </li>
+                            <li class="bg-white p-3.5 rounded-xl border border-slate-200">
+                                <strong class="text-emerald-800 block mb-1">Modal Imperatives:</strong>
+                                <code class="bg-slate-100 px-2 py-1 rounded text-sm font-mono text-slate-800">should + [base verb]</code>
+                                <p class="text-slate-600 mt-2 text-sm"><em>e.g., You <u>should identify</u> suitable speakers at least 1 month before.</em></p>
+                            </li>
+                            <li class="bg-white p-3.5 rounded-xl border border-slate-200">
+                                <strong class="text-emerald-800 block mb-1">Conditional Clauses:</strong>
+                                <code class="bg-slate-100 px-2 py-1 rounded text-sm font-mono text-slate-800">Main Clause + IF + [present simple]</code>
+                                <p class="text-slate-600 mt-2 text-sm"><em>e.g., You should arrange parking <u>if you invite</u> external speakers.</em></p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Complete Model Response Card (With Color-Coded Key Highlights) -->
+                <div class="bg-slate-900 text-slate-100 rounded-2xl p-6 md:p-8 space-y-4 shadow-lg">
+                    <div class="flex flex-wrap justify-between items-center gap-4">
+                        <h3 class="text-xl font-bold text-yellow-400 flex items-center gap-2">
+                            <i class="fa-solid fa-file-contract"></i> Highlighted Model Response
+                        </h3>
+                        <!-- Legend Badges -->
+                        <div class="flex flex-wrap gap-2 text-xs">
+                            <span class="hl-sugg">Suggestions</span>
+                            <span class="hl-seq">Sequence Words</span>
+                            <span class="hl-modal">Modals / Imperatives</span>
+                            <span class="hl-if">If-Conditionals</span>
+                            <span class="hl-conn">Connectives</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-950 p-5 md:p-6 rounded-xl font-mono text-sm md:text-base space-y-4 leading-relaxed text-slate-300 border border-slate-800">
+                        <p>Dear Stephen,</p>
+                        <p>Thank you for your email about the Clean-up Campaign. I am writing to make suggestions and tell you how to invite speakers for the recycling workshop.</p>
+                        <p>Regarding the target participants, <span class="hl-sugg">it might be a good idea to</span> invite employees and local residents <span class="hl-conn">because</span> they are likely to make a positive impact on the community. <span class="hl-conn">Also</span>, they can adopt sustainable habits in their daily lives. As for the promotional method, <span class="hl-sugg">I suggest</span> using social media platforms <span class="hl-conn">because</span> they can reach a wide audience quickly and interactively. <span class="hl-conn">In addition</span>, the cost of promoting online is low.</p>
+                        <p>To invite speakers for the recycling workshop, <span class="hl-seq">first</span>, you <span class="hl-modal">should identify</span> suitable speakers at least 1 month before the workshop. <span class="hl-seq">Then</span>, you <span class="hl-modal">should prepare</span> formal invitations to the speakers including event details such as event objectives and the schedule. <span class="hl-seq">Next</span>, you <span class="hl-modal">should submit</span> the proposed workshop arrangements for the Manager’s approval. <span class="hl-seq">After that</span>, the Event Coordinator <span class="hl-modal">should contact</span> the speakers. <span class="hl-seq">Finally</span>, you <span class="hl-modal">should arrange</span> transportation and parking <span class="hl-if">if you invite</span> external speakers. You <span class="hl-modal">should inform</span> related departments <span class="hl-if">if you invite</span> internal speakers.</p>
+                        <p>Please let me know if you need more information.</p>
+                        <p class="pt-2">Regards,<br>Emma</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: 10-15 MINUTE GAMIFIED KNOWLEDGE CHALLENGE -->
+        <div id="gameTab" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-6 md:p-8">
+                <!-- Game Header -->
+                <div class="flex flex-wrap justify-between items-center pb-6 mb-6 border-b gap-4">
+                    <div>
+                        <span class="text-xs font-bold text-purple-700 uppercase tracking-widest bg-purple-100 px-3 py-1 rounded-full border border-purple-300">10-15 Min Express Quiz</span>
+                        <h2 class="text-2xl font-extrabold text-slate-800 mt-1">Workplace English Challenge</h2>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="text-center bg-slate-100 px-4 py-2 rounded-xl">
+                            <span class="block text-xs uppercase text-slate-500 font-bold">Score</span>
+                            <span id="gameScore" class="text-2xl font-black text-blue-600">0 / 100</span>
+                        </div>
+                        <div class="text-center bg-slate-100 px-4 py-2 rounded-xl">
+                            <span class="block text-xs uppercase text-slate-500 font-bold">Question</span>
+                            <span id="gameProgress" class="text-2xl font-black text-purple-600">1 / 5</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz Container -->
+                <div id="quizContainer" class="space-y-6">
+                    <div id="questionCard" class="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span id="questionCategory" class="text-xs font-extrabold px-3 py-1 bg-blue-100 text-blue-900 rounded-lg uppercase tracking-wider">Category</span>
+                        </div>
+                        <h3 id="questionText" class="text-lg md:text-xl font-bold text-slate-900 leading-relaxed">Question text goes here?</h3>
+                        
+                        <!-- Options List -->
+                        <div id="optionsList" class="grid grid-cols-1 gap-3.5 pt-2">
+                            <!-- Injected via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Explanation Area -->
+                    <div id="explanationBox" class="hidden p-5 rounded-xl border text-base leading-relaxed"></div>
+
+                    <!-- Next Button -->
+                    <div class="flex justify-end pt-2">
+                        <button id="nextBtn" onclick="nextQuestion()" class="hidden bg-purple-600 hover:bg-purple-700 text-white font-bold text-base px-8 py-3 rounded-xl transition flex items-center gap-3 shadow-md">
+                            Next Question <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Game Completion Modal Screen -->
+                <div id="gameFinishScreen" class="hidden text-center py-10 space-y-6">
+                    <div class="inline-flex p-6 bg-yellow-100 text-yellow-600 rounded-full text-5xl shadow-inner">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <h3 class="text-3xl font-extrabold text-slate-800">Challenge Completed!</h3>
+                    <p id="finalScoreText" class="text-2xl font-bold text-blue-600">Your Score: 100 / 100</p>
+                    <p id="finalFeedbackText" class="text-base text-slate-600 max-w-lg mx-auto">Great job! You have demonstrated solid mastery of workplace email structure and grammar focus items.</p>
+                    <div class="pt-4 flex flex-wrap justify-center gap-4">
+                        <button onclick="restartGame()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-8 py-3.5 rounded-xl transition text-base shadow">
+                            <i class="fa-solid fa-rotate-right mr-2"></i> Play Again
+                        </button>
+                        <button onclick="switchTab('revisionTab')" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-8 py-3.5 rounded-xl transition text-base">
+                            Review Key Language Focus
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6 mt-auto">
+        <div class="max-w-7xl mx-auto px-6 text-center text-sm text-slate-500 font-medium">
+            &copy; Vocational Training Council — VE2C IA Mock Practice Resource
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic Section -->
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.remove('hidden');
+            document.getElementById('tab-' + tabId).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function fillSuggestedAnswer() {
+            document.getElementById('open_topic').value = "Clean-up Campaign";
+            document.getElementById('open_purpose').value = "make suggestions";
+            document.getElementById('open_purpose2').value = "invite speakers";
+            
+            document.getElementById('sugg_struct_1').value = "it might be a good idea to";
+            document.getElementById('target_who').value = "invite employees and local residents";
+            document.getElementById('target_reason1').value = "positive impact on the community";
+            document.getElementById('target_reason2').value = "sustainable habits in their daily lives";
+
+            document.getElementById('sugg_struct_2').value = "I suggest";
+            document.getElementById('method_what').value = "using social media platforms";
+            document.getElementById('method_reason').value = "promoting online is low";
+
+            document.getElementById('seq_1').value = "First";
+            document.getElementById('modal_1').value = "should";
+            document.getElementById('step1_action').value = "identify suitable speakers";
+
+            document.getElementById('seq_2').value = "Then";
+            document.getElementById('step2_action').value = "prepare formal invitations";
+
+            document.getElementById('seq_3').value = "Next";
+            document.getElementById('step3_approval').value = "approval";
+
+            document.getElementById('seq_4').value = "After that";
+            document.getElementById('modal_4').value = "should";
+
+            document.getElementById('seq_5').value = "Finally";
+            document.getElementById('if_cond_1').value = "if";
+            document.getElementById('cond_verb1').value = "invite external speakers";
+
+            document.getElementById('cond_action2').value = "inform related departments";
+            document.getElementById('if_cond_2').value = "if";
+
+            // Clear visual input styles if re-filling
+            clearInputErrorStyles();
+        }
+
+        function clearInputErrorStyles() {
+            const inputs = document.querySelectorAll('.blank-input, .blank-select');
+            inputs.forEach(el => {
+                el.classList.remove('border-red-500', 'bg-red-50', 'border-green-500', 'bg-green-50');
+            });
+        }
+
+        function resetEmailForm() {
+            document.getElementById('emailForm').reset();
+            clearInputErrorStyles();
+            const res = document.getElementById('feedbackResult');
+            res.className = 'hidden';
+            res.innerHTML = '';
+        }
+
+        function setInputStatus(elementId, isCorrect) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            if (isCorrect) {
+                el.classList.remove('border-red-500', 'bg-red-50', 'border-slate-300');
+                el.classList.add('border-green-500', 'bg-green-50');
+            } else {
+                el.classList.remove('border-green-500', 'bg-green-50', 'border-slate-300');
+                el.classList.add('border-red-500', 'bg-red-50');
+            }
+        }
+
+        function checkEmailAnswers() {
+            let score = 0;
+            let total = 18;
+            let errorsList = [];
+
+            // Helper function to evaluate and record results
+            function checkItem(id, userVal, isCorrect, sectionName, yourInput, expectedVal, errorExplanation) {
+                if (isCorrect) {
+                    score++;
+                    setInputStatus(id, true);
+                } else {
+                    setInputStatus(id, false);
+                    errorsList.push({
+                        section: sectionName,
+                        userEntered: userVal.trim() === "" ? "(blank)" : userVal,
+                        expected: expectedVal,
+                        explanation: errorExplanation
+                    });
+                }
+            }
+
+            // --- Section 1: Opening ---
+            const topic = document.getElementById('open_topic').value;
+            const topicValid = topic.toLowerCase().includes("clean-up") || topic.toLowerCase().includes("cleanup") || topic.toLowerCase().includes("campaign");
+            checkItem('open_topic', topic, topicValid, "1. Opening Topic", topic, "Clean-up Campaign", "Refer back to Stephen's email subject line: 'Clean-up Campaign'.");
+
+            const purp1 = document.getElementById('open_purpose').value;
+            const purp1Valid = purp1.toLowerCase().includes("suggestion") || purp1.toLowerCase().includes("suggest");
+            checkItem('open_purpose', purp1, purp1Valid, "1. Purpose (Part A)", purp1, "make suggestions", "In his email, Stephen asked for your ideas. You are writing to 'make suggestions'.");
+
+            const purp2 = document.getElementById('open_purpose2').value;
+            const purp2Valid = purp2.toLowerCase().includes("invite") || purp2.toLowerCase().includes("speaker");
+            checkItem('open_purpose2', purp2, purp2Valid, "1. Purpose (Part B)", purp2, "invite speakers", "Stephen asked how to invite speakers for the workshop.");
+
+            // --- Section 2: Suggestions & Reasons ---
+            const struct1 = document.getElementById('sugg_struct_1').value;
+            const struct1Valid = struct1 === "it might be a good idea to";
+            checkItem('sugg_struct_1', struct1, struct1Valid, "2A. Suggestion Structure (Target)", struct1, "it might be a good idea to", "Grammar Rule: 'it might be a good idea to' is followed by a base verb ('invite').");
+
+            const targetWho = document.getElementById('target_who').value;
+            const targetWhoValid = targetWho.toLowerCase().includes("employee") && targetWho.toLowerCase().includes("resident");
+            checkItem('target_who', targetWho, targetWhoValid, "2A. Target Participants", targetWho, "invite employees and local residents", "Information from Handwritten Notes: include both employees and local residents.");
+
+            const targetR1 = document.getElementById('target_reason1').value;
+            const targetR1Valid = targetR1.toLowerCase().includes("impact") || targetR1.toLowerCase().includes("community");
+            checkItem('target_reason1', targetR1, targetR1Valid, "2A. Reason for Target", targetR1, "positive impact on the community", "Extract the phrase 'positive impact on community' from the handwritten notes.");
+
+            const targetR2 = document.getElementById('target_reason2').value;
+            const targetR2Valid = targetR2.toLowerCase().includes("habit") || targetR2.toLowerCase().includes("sustainable");
+            checkItem('target_reason2', targetR2, targetR2Valid, "2A. Additional Benefit", targetR2, "sustainable habits in their daily lives", "Extract 'adopt sustainable habits in daily lives' from notes.");
+
+            const struct2 = document.getElementById('sugg_struct_2').value;
+            const struct2Valid = struct2 === "I suggest";
+            checkItem('sugg_struct_2', struct2, struct2Valid, "2B. Suggestion Structure (Method)", struct2, "I suggest", "Grammar Rule: 'I suggest' is followed by a gerund verb-ing ('using').");
+
+            const methodWhat = document.getElementById('method_what').value;
+            const methodWhatValid = methodWhat.toLowerCase().includes("social media");
+            checkItem('method_what', methodWhat, methodWhatValid, "2B. Promotional Method", methodWhat, "using social media platforms", "Extract 'Social media platforms' from the prompt notes.");
+
+            const methodReason = document.getElementById('method_reason').value;
+            const methodReasonValid = methodReason.toLowerCase().includes("low") || methodReason.toLowerCase().includes("online");
+            checkItem('method_reason', methodReason, methodReasonValid, "2B. Reason for Method", methodReason, "promoting online is low", "Notice the sentence pattern: 'the cost of [promoting online is low]'.");
+
+            // --- Section 3: Sequence, Modals & Work Plan ---
+            const seq1 = document.getElementById('seq_1').value;
+            checkItem('seq_1', seq1, seq1 === "First", "3. Step 1 Connector", seq1, "First", "Sequential Order: Start the multi-step guide with 'First'.");
+
+            const mod1 = document.getElementById('modal_1').value;
+            checkItem('modal_1', mod1, mod1 === "should", "3. Step 1 Modal Verb", mod1, "should", "Modal Rule: Use 'should + base verb' to give professional workplace instructions.");
+
+            const step1Act = document.getElementById('step1_action').value;
+            const step1ActValid = step1Act.toLowerCase().includes("identify") || step1Act.toLowerCase().includes("speaker");
+            checkItem('step1_action', step1Act, step1ActValid, "3. Step 1 Work Plan Action", step1Act, "identify suitable speakers", "Work Plan Action Item #1: 'Identify suitable speakers'.");
+
+            const seq2 = document.getElementById('seq_2').value;
+            checkItem('seq_2', seq2, seq2 === "Then", "3. Step 2 Connector", seq2, "Then", "Sequential Order: Follow 'First' with 'Then'.");
+
+            const step2Act = document.getElementById('step2_action').value;
+            const step2ActValid = step2Act.toLowerCase().includes("prepare") || step2Act.toLowerCase().includes("invitation");
+            checkItem('step2_action', step2Act, step2ActValid, "3. Step 2 Work Plan Action", step2Act, "prepare formal invitations", "Work Plan Action Item #2: 'Prepare formal invitation to speakers'.");
+
+            const seq3 = document.getElementById('seq_3').value;
+            checkItem('seq_3', seq3, seq3 === "Next", "3. Step 3 Connector", seq3, "Next", "Sequential Order: Continue step 3 with 'Next'.");
+
+            const step3App = document.getElementById('step3_approval').value;
+            const step3AppValid = step3App.toLowerCase().includes("approval") || step3App.toLowerCase().includes("approve");
+            checkItem('step3_approval', step3App, step3AppValid, "3. Step 3 Noun", step3App, "approval", "Grammar & Content: Notice the possessive 'Manager's', which requires the noun 'approval'.");
+
+            const seq4 = document.getElementById('seq_4').value;
+            checkItem('seq_4', seq4, seq4 === "After that", "3. Step 4 Connector", seq4, "After that", "Sequential Order: Use 'After that' for step 4.");
+
+            const mod4 = document.getElementById('modal_4').value;
+            checkItem('modal_4', mod4, mod4 === "should", "3. Step 4 Modal Verb", mod4, "should", "Modal Rule: Use polite obligation 'should contact'.");
+
+            // --- Conditionals ---
+            const seq5 = document.getElementById('seq_5').value;
+            checkItem('seq_5', seq5, seq5 === "Finally", "3. Step 5 Connector", seq5, "Finally", "Sequential Order: Conclude the final step with 'Finally'.");
+
+            const if1 = document.getElementById('if_cond_1').value;
+            checkItem('if_cond_1', if1, if1 === "if", "3. Condition 1 Connector", if1, "if", "Condition Rule: Use 'if' to introduce conditional action ('if you invite external speakers').");
+
+            const condVerb1 = document.getElementById('cond_verb1').value;
+            const condVerb1Valid = condVerb1.toLowerCase().includes("external") && condVerb1.toLowerCase().includes("invite");
+            checkItem('cond_verb1', condVerb1, condVerb1Valid, "3. Condition 1 Phrase", condVerb1, "invite external speakers", "Work Plan Step 5a Remark: 'if [you invite external speakers]'.");
+
+            const condAct2 = document.getElementById('cond_action2').value;
+            const condAct2Valid = condAct2.toLowerCase().includes("inform") && condAct2.toLowerCase().includes("department");
+            checkItem('cond_action2', condAct2, condAct2Valid, "3. Condition 2 Action", condAct2, "inform related departments", "Work Plan Step 5b Action Item: 'Inform related departments'.");
+
+            const if2 = document.getElementById('if_cond_2').value;
+            checkItem('if_cond_2', if2, if2 === "if", "3. Condition 2 Connector", if2, "if", "Condition Rule: Use 'if' to connect internal speaker condition.");
+
+            // Output Feedback Summary
+            const resBox = document.getElementById('feedbackResult');
+            resBox.classList.remove('hidden');
+
+            const percentage = Math.round((score / total) * 100);
+
+            if (score === total) {
+                resBox.className = "mt-8 p-6 rounded-2xl border bg-green-50 border-green-300 text-green-950 shadow-sm";
+                resBox.innerHTML = `
+                    <div class="flex items-center gap-3 font-extrabold text-xl text-green-800 mb-2">
+                        <i class="fa-solid fa-circle-check text-green-600 text-2xl"></i> Excellent! Perfect Assessment Response (${score}/${total} - 100%)
+                    </div>
+                    <p class="text-base text-green-800 font-medium">All grammar structures, task information, modals, and conditional clauses match the IA assessment criteria perfectly!</p>
+                `;
+            } else {
+                resBox.className = "mt-8 p-6 rounded-2xl border bg-amber-50 border-amber-300 text-amber-950 shadow-sm";
+                
+                let errorsHTML = errorsList.map((err, i) => `
+                    <div class="bg-white p-4 rounded-xl border border-amber-200 space-y-1.5 shadow-sm">
+                        <div class="flex flex-wrap justify-between items-center gap-2">
+                            <span class="font-bold text-amber-900 text-sm bg-amber-100 px-2.5 py-0.5 rounded">${err.section}</span>
+                            <span class="text-xs text-red-600 font-bold"><i class="fa-solid fa-xmark"></i> Incorrect / Missing</span>
+                        </div>
+                        <div class="text-sm text-slate-800 font-mono pt-1">
+                            <div><strong class="text-red-700">Your Answer:</strong> ${err.userEntered}</div>
+                            <div><strong class="text-green-700">Suggested Answer:</strong> ${err.expected}</div>
+                        </div>
+                        <div class="text-xs md:text-sm text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-200 mt-2">
+                            <strong class="text-blue-800"><i class="fa-solid fa-lightbulb text-yellow-500"></i> Grammar / Prompt Explanation:</strong> ${err.explanation}
+                        </div>
+                    </div>
+                `).join('');
+
+                resBox.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 font-extrabold text-xl text-amber-900 border-b border-amber-200 pb-3">
+                            <i class="fa-solid fa-circle-exclamation text-amber-600 text-2xl"></i> Assessment Score: ${score} / ${total} (${percentage}%) — Review Points Below
+                        </div>
+                        <p class="text-base font-semibold text-amber-950">
+                            Here is a breakdown of your mistakes, suggested answers, and grammar explanations to help you revise:
+                        </p>
+                        <div class="space-y-3 pt-1">
+                            ${errorsHTML}
+                        </div>
+                        <div class="pt-3 border-t border-amber-200 flex justify-end">
+                            <button onclick="switchTab('revisionTab')" class="text-sm bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2.5 rounded-xl transition shadow">
+                                Go to Tab 3 for Detailed Language Revision <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+            resBox.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        /* Quiz Logic */
+        const quizQuestions = [
+            {
+                category: "Making Suggestions",
+                question: "Complete the sentence: 'I suggest ________ (use) social media platforms.'",
+                options: ["to use", "using", "used", "use"],
+                correct: 1,
+                explanation: "Rule: 'I suggest' is followed by a gerund (verb + -ing). Thus, 'using' is correct."
+            },
+            {
+                category: "Making Suggestions",
+                question: "Which suggestion structure is followed by a BASE verb?",
+                options: ["I suggest...", "It might be a good idea to...", "What about...", "How about..."],
+                correct: 1,
+                explanation: "'It might be a good idea to' takes a base verb (e.g. 'to invite'). 'I suggest' takes verb-ing."
+            },
+            {
+                category: "Modals for Action",
+                question: "Which modal verb is standard for giving workplace instructions?",
+                options: ["You should identify...", "You might identify...", "You could identify...", "You would identify..."],
+                correct: 0,
+                explanation: "'Should + base verb' is used to express polite obligation/instructions in workplace correspondence."
+            },
+            {
+                category: "If-Conditionals",
+                question: "Choose the grammatically correct sentence with a conditional clause:",
+                options: [
+                    "Arrange parking if you will invite external speakers.",
+                    "You should arrange parking if you invite external speakers.",
+                    "You arranges parking if you inviting external speakers.",
+                    "You arrange parking if you invited external speakers."
+                ],
+                correct: 1,
+                explanation: "Standard conditional structure: 'Modal (should + base verb)' + 'if clause in present simple (invite)'."
+            },
+            {
+                category: "Sequential Connectors",
+                question: "What is the standard order for 4 sequential step connectors?",
+                options: [
+                    "Finally -> First -> Then -> Next",
+                    "First -> Then -> Next -> After that",
+                    "Then -> First -> Next -> Finally",
+                    "Next -> Then -> After that -> First"
+                ],
+                correct: 1,
+                explanation: "Logical order starts with 'First', continues with 'Then', 'Next', 'After that', and concludes with 'Finally'."
+            }
+        ];
+
+        let currentQ = 0;
+        let gameScore = 0;
+        let answered = false;
+
+        function loadQuestion() {
+            answered = false;
+            const q = quizQuestions[currentQ];
+            document.getElementById('questionCategory').innerText = q.category;
+            document.getElementById('questionText').innerText = q.question;
+            document.getElementById('gameProgress').innerText = `${currentQ + 1} / ${quizQuestions.length}`;
+            
+            const exp = document.getElementById('explanationBox');
+            exp.classList.add('hidden');
+            
+            const nextBtn = document.getElementById('nextBtn');
+            nextBtn.classList.add('hidden');
+
+            const list = document.getElementById('optionsList');
+            list.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-xl border-2 border-slate-200 bg-white hover:bg-slate-50 text-base font-semibold transition flex items-center gap-4 shadow-sm";
+                btn.onclick = () => selectOption(idx);
+                btn.innerHTML = `<span class="w-8 h-8 rounded-full bg-slate-200 text-slate-800 flex items-center justify-center font-bold text-sm flex-shrink-0">${String.fromCharCode(65 + idx)}</span> <span>${opt}</span>`;
+                list.appendChild(btn);
+            });
+        }
+
+        function selectOption(index) {
+            if (answered) return;
+            answered = true;
+
+            const q = quizQuestions[currentQ];
+            const buttons = document.getElementById('optionsList').children;
+            const exp = document.getElementById('explanationBox');
+
+            if (index === q.correct) {
+                gameScore += 20;
+                document.getElementById('gameScore').innerText = `${gameScore} / 100`;
+                buttons[index].className = "w-full text-left p-4 rounded-xl border-2 border-green-500 bg-green-50 text-green-950 text-base font-bold flex items-center gap-4 shadow-sm";
+                exp.className = "p-5 rounded-xl border-2 border-green-300 bg-green-50 text-green-950 text-base mt-4";
+                exp.innerHTML = `<strong><i class="fa-solid fa-circle-check text-green-600"></i> Correct!</strong> ${q.explanation}`;
+            } else {
+                buttons[index].className = "w-full text-left p-4 rounded-xl border-2 border-red-500 bg-red-50 text-red-950 text-base font-bold flex items-center gap-4 shadow-sm";
+                buttons[q.correct].className = "w-full text-left p-4 rounded-xl border-2 border-green-500 bg-green-50 text-green-950 text-base font-bold flex items-center gap-4 shadow-sm";
+                exp.className = "p-5 rounded-xl border-2 border-red-300 bg-red-50 text-red-950 text-base mt-4";
+                exp.innerHTML = `<strong><i class="fa-solid fa-circle-xmark text-red-600"></i> Incorrect.</strong> ${q.explanation}`;
+            }
+
+            exp.classList.remove('hidden');
+            document.getElementById('nextBtn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentQ++;
+            if (currentQ < quizQuestions.length) {
+                loadQuestion();
+            } else {
+                showFinishScreen();
+            }
+        }
+
+        function showFinishScreen() {
+            document.getElementById('quizContainer').classList.add('hidden');
+            const finish = document.getElementById('gameFinishScreen');
+            finish.classList.remove('hidden');
+            
+            document.getElementById('finalScoreText').innerText = `Your Final Score: ${gameScore} / 100`;
+            if (gameScore >= 80) {
+                document.getElementById('finalFeedbackText').innerText = "Outstanding performance! You have mastered making suggestions, giving instructions, modal verbs, and if-conditionals!";
+            } else {
+                document.getElementById('finalFeedbackText').innerText = "Good effort! Review Tab 3 (Key Language Focus) to reinforce modal structures and sequence connectors.";
+            }
+        }
+
+        function restartGame() {
+            currentQ = 0;
+            gameScore = 0;
+            document.getElementById('gameScore').innerText = "0 / 100";
+            document.getElementById('gameFinishScreen').classList.add('hidden');
+            document.getElementById('quizContainer').classList.remove('hidden');
+            loadQuestion();
+        }
+
+        window.onload = function() {
+            loadQuestion();
+        };
+    </script>
+</body>
+</html>
